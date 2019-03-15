@@ -14,10 +14,11 @@
 	mf = !git c devel && git pl && git m - --no-edit && git ps
 	md = !git c test && git pl && git m devel --no-edit && git ps
 	mt = !git c master && git pl && git m test --no-edit && git ps 
+	pf = push -f
 	pl = pull -r
+	pr = "!BRANCH=$(git rev-parse --abbrev-ref HEAD) && curl https://api.bitbucket.org/2.0/repositories/isobarczechrepublic/$(basename $(git rev-parse --show-toplevel))/pullrequests -s -u %USERNAME%:%PASSWORD% -H 'Content-Type: application/json' -d '{\"title\":\"Merge '\"$BRANCH\"' into devel\",\"source\":{\"branch\":{\"name\":\"'\"$BRANCH\"'\"}},\"destination\":{\"branch\":{\"name\":\"devel\"}},\"reviewers\":['$(echo -n $@|awk 'BEGIN{RS=\" \"}{print\"{\\\"username\\\":\\\"\"$1\"\\\"}\"}'|paste -sd,)']}' | jq -r '.links.html.href' #"
 	ps = !git pu || ( git pl && git pu )
 	pu = push -u origin HEAD
-	pf = push -f
 	rb = rebase
 	rba = rebase --abort
 	rbc = rebase --continue

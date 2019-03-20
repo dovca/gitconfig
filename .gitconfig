@@ -30,7 +30,7 @@
 			esac;\
 		done;\
 		shift $((OPTIND-1));\
- 		curl https://api.bitbucket.org/2.0/repositories/isobarczechrepublic/$(basename $(git rev-parse --show-toplevel))/pullrequests\
+ 		curl https://api.bitbucket.org/2.0/repositories/%COMPANY%/$(basename $(git rev-parse --show-toplevel))/pullrequests\
 			-s\
 			-u %USERNAME:%PASSWORD%\
 			-H 'Content-Type: application/json'\

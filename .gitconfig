@@ -10,7 +10,7 @@
 	d = diff
 	ds = diff --staged
 	g = log --all --oneline --graph
-	hf = !git c hotfix && git c master && git pl && git m --no-edit hotfix && git ps && git c devel && git pl && git m --no-edit hotfix && git ps
+	hf = !git c hotfix && git c master && git pl && git m --no-edit hotfix && git ps && git c devel && git pl && git m --no-edit hotfix && git ps && git bd hotfix
 	m = merge --no-ff
 	mf = !git c devel && git pl && git m - --no-edit && git ps
 	md = !git c test && git pl && git m devel --no-edit && git ps
@@ -50,7 +50,7 @@
 					'$(echo -n $@|awk 'BEGIN{RS=\" \"}{print\"{\\\"username\\\":\\\"\"$1\"\\\"}\"}'|paste -sd,)'\
 				]\
 			}'\
-			| jq -r '.links.html.href';\
+			| jq -r '.links.html.href // .error.message';\
 		#"
 	rb = rebase
 	rba = rebase --abort

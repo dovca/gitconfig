@@ -31,6 +31,7 @@
 			esac;\
 		done;\
 		shift $((OPTIND-1));\
+		git ps;\
  		curl https://api.bitbucket.org/2.0/repositories/%COMPANY%/$(basename $(git rev-parse --show-toplevel))/pullrequests\
 			-s\
 			-u %USERNAME:%PASSWORD%\

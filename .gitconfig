@@ -11,6 +11,7 @@
 	ds = diff --staged
 	g = log --all --oneline --graph
 	hf = !git c hotfix && git c master && git pl && git m --no-edit hotfix && git ps && git c devel && git pl && git m --no-edit hotfix && git ps && git bd hotfix
+	hfc = !git c master && git pl && git cb hotfix
 	m = merge --no-ff
 	mf = !git c devel && git pl && git m - --no-edit && git ps
 	md = !git c test && git pl && git m devel --no-edit && git ps

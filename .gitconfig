@@ -20,40 +20,42 @@
 	ps = !git pu || ( git pl && git pu )
 	pu = push -u origin HEAD
 	pf = push -f
-	pr = "!usage () { echo \"usage: git pr [-b <target>=devel] [<reviewers>...]\"; };\
-		dst=\"devel\";\
-		src=$(git rev-parse --abbrev-ref HEAD);\
-		while getopts \":b:h\" o; do\
-			case \"$o\" in\
-				b) dst=$OPTARG;;\
-				h) usage; return 0;;\
-				*) usage; return 1;;\
-			esac;\
-		done;\
-		shift $((OPTIND-1));\
-		git ps;\
- 		curl https://api.bitbucket.org/2.0/repositories/%COMPANY%/$(basename $(git rev-parse --show-toplevel))/pullrequests\
-			-s\
-			-u %USERNAME:%PASSWORD%\
-			-H 'Content-Type: application/json'\
-			-d '{\
-				\"title\":\"Merge '\"$src\"' into '\"$dst\"'\",\
-				\"source\":{\
-					\"branch\":{\
-						\"name\":\"'\"$src\"'\"\
-					}\
-				},\
-				\"destination\":{\
-					\"branch\":{\
-						\"name\":\"'\"$dst\"'\"\
-					}\
-				},\
-				\"reviewers\":[\
-					'$(echo -n $@|awk 'BEGIN{RS=\" \"}{print\"{\\\"username\\\":\\\"\"$1\"\\\"}\"}'|paste -sd,)'\
-				]\
-			}'\
-			| jq -r '.links.html.href // .error.message';\
-		#"
+	pr = "!alias_git_pr() {\
+			usage () { echo \"usage: git pr [-b <target>=devel] [<reviewers>...]\"; };\
+			local dst=\"devel\";\
+			local src=$(git rev-parse --abbrev-ref HEAD);\
+			while getopts \":b:h\" o; do\
+				case \"$o\" in\
+					b) dst=$OPTARG;;\
+					h) usage; return 0;;\
+					*) usage; return 1;;\
+				esac;\
+			done;\
+			shift $((OPTIND-1));\
+			git ps && \
+			curl https://api.bitbucket.org/2.0/repositories/$BITBUCKET_TEAMNAME/$(basename $(git rev-parse --show-toplevel))/pullrequests\
+				-s\
+				-u \"$BITBUCKET_USERNAME:$BITBUCKET_PASSWORD\"\
+				-H 'Content-Type: application/json'\
+				-d '{\
+					\"title\":\"Merge '\"$src\"' into '\"$dst\"'\",\
+					\"source\":{\
+						\"branch\":{\
+							\"name\":\"'\"$src\"'\"\
+						}\
+					},\
+					\"destination\":{\
+						\"branch\":{\
+							\"name\":\"'\"$dst\"'\"\
+						}\
+					},\
+					\"reviewers\":[\
+						'$(echo -n $@|awk 'BEGIN{RS=\" \"}{print\"{\\\"username\\\":\\\"\"$1\"\\\"}\"}'|paste -sd,)'\
+					]\
+				}'\
+				| jq -r '.links.html.href // .error.message';\
+		};\
+		alias_git_pr"
 	rb = rebase
 	rba = rebase --abort
 	rbc = rebase --continue
@@ -65,3 +67,4 @@
 	s = status
 	ss = stash save
 	sp = stash pop
+

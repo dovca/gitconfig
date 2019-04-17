@@ -9,6 +9,7 @@
 	cma = commit -a --amend
 	d = diff
 	ds = diff --staged
+	f = fetch
 	g = log --all --oneline --graph
 	hf = !git c hotfix && git c master && git pl && git m --no-edit hotfix && git ps && git c devel && git pl && git m --no-edit hotfix && git ps && git bd hotfix
 	hfc = !git c master && git pl && git cb hotfix
@@ -16,10 +17,13 @@
 	mf = !git c devel && git pl && git m - --no-edit && git ps
 	md = !git c test && git pl && git m devel --no-edit && git ps
 	mt = !git c master && git pl && git m test --no-edit && git ps 
+	mfd = !git mf && git md
+	mfdt = !git mf && git md && git mt
+	pf = push -f
 	pl = pull -r
+	po = push origin
 	ps = !git pu || ( git pl && git pu )
 	pu = push -u origin HEAD
-	pf = push -f
 	pr = "!alias_git_pr() {\
 		usage () { echo \"usage: git pr [-b <target>] [-t <title>] [<reviewers>...]\"; };\
 			local dst=\"devel\";\
@@ -27,7 +31,7 @@
 			local title=\"Merge $src into $dst\";\
 			while getopts \":b:t:h\" o; do\
 				case \"$o\" in\
-					b) dst=$OPTARG;;\
+					b) dst=$OPTARG; title=\"Merge $src into $dst\";;\
 					t) title=$OPTARG;;\
 					h) usage; return 0;;\
 					*) usage; return 1;;\
@@ -62,6 +66,8 @@
 	rba = rebase --abort
 	rbc = rebase --continue
 	rbd = rebase devel
+	rbm = rebase master
+	rbt = rebase test
 	r = reset
 	rh = reset --hard
 	rhh = reset --hard HEAD^
@@ -69,4 +75,5 @@
 	s = status
 	ss = stash save
 	sp = stash pop
+	t = tag
 

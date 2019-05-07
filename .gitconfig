@@ -5,6 +5,8 @@
 	bd = branch -D
 	c = checkout
 	cb = checkout -b
+	cf = !git c devel && git pl && git cb
+	cl = clone
 	cm = commit -am
 	cma = commit -a --amend
 	d = diff
@@ -14,16 +16,16 @@
 	hf = !git c hotfix && git c master && git pl && git m --no-edit hotfix && git ps && git c devel && git pl && git m --no-edit hotfix && git ps && git bd hotfix
 	hfc = !git c master && git pl && git cb hotfix
 	m = merge --no-ff
-	mf = !git c devel && git pl && git m - --no-edit && git ps
+	ma = merge --abort
+	mc = merge --continue
 	md = !git c test && git pl && git m devel --no-edit && git ps
-	mt = !git c master && git pl && git m test --no-edit && git ps 
+	mf = !git c devel && git pl && git m - --no-edit && git ps
 	mfd = !git mf && git md
 	mfdt = !git mf && git md && git mt
+	mt = !git c master && git pl && git m test --no-edit && git ps 
 	pf = push -f
 	pl = pull -r
 	po = push origin
-	ps = !git pu || ( git pl && git pu )
-	pu = push -u origin HEAD
 	pr = "!alias_git_pr() {\
 		usage () { echo \"usage: git pr [-b <target>] [-t <title>] [<reviewers>...]\"; };\
 			local dst=\"devel\";\
@@ -62,6 +64,8 @@
 				| jq -r '.links.html.href // .error.message';\
 		};\
 		alias_git_pr"
+	ps = !git pu || ( git pl && git pu )
+	pu = push -u origin HEAD
 	rb = rebase
 	rba = rebase --abort
 	rbc = rebase --continue
